@@ -2,7 +2,7 @@
 % Please edit documentation in R/compoundListFunctions.R
 \name{getDataFrameOfDuplicateCompounds}
 \alias{getDataFrameOfDuplicateCompounds}
-\title{This function creates a data frame which contains the duplicated compounds
+\title{This fucntion creates a data frame which contains the duplicated compounds
 in the initial graph. We need this because some reaction has a subtrate or
 a product that has a metabolite that we find more than one in the graph but
 we don't know which node we should use (reaction type ortholog). We prefer

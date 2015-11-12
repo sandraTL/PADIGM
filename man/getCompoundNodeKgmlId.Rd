@@ -2,7 +2,7 @@
 % Please edit documentation in R/graphFunctions.R
 \name{getCompoundNodeKgmlId}
 \alias{getCompoundNodeKgmlId}
-\title{A graph function}
+\title{A igraph function}
 \usage{
 getCompoundNodeKgmlId(g, compoundKeggId, nodeDF)
 }

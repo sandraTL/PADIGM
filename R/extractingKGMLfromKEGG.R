@@ -5,7 +5,6 @@
 #' xml format in data directory
 #' @param this function parses all data from kegg
 #' @keywords  kegg
-#' @export
 #' @examples
 #' getPathwayKGML("hsa01100")
 
@@ -18,17 +17,6 @@ getPathwayKGML <- function(pathwayId) {
     download.file(adressfile, destfile, method = "curl");
 
 }
-
-
-# ### ortholog get info of a reaction
-# getReactionInfo <- function(reactionId){
-#
-#     reactionInfo <- KEGGREST::keggGet(reactionId);
-#
-#     return <- reactionInfo;
-#
-# }
-
 
 toStringDestfile <- function(pathwayId){
     #concatenation of pathwayId to set swdir for the xml

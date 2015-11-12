@@ -8,7 +8,6 @@
 #'
 #' @param data frame des reactions extraites du KGML en listes
 #' @keywords  kegg
-#' @export
 #' @examples completeEdgeList(edgeDataFrame)
 
 unlistEdgeReactionCol <- function(edgeDataFrame){
@@ -45,10 +44,9 @@ correctReactionString <- function(edgeDF){
 #'
 #' @param id of the explored pathway
 #' @keywords reaction data.frame
-#' @export
-#' @examples mergeReactionEdgeDF(pathwayId)
+#' @examples finalReactionEdgeDF(pathwayId)
 
-mergeReactionEdgeDF <- function(pathwayId){
+finalReactionEdgeDF <- function(pathwayId){
 
     edgeDF <- getListEdgeFromGeneKGML(pathwayId);
     reactionDF <- getListReactionFromKGML(pathwayId);
@@ -65,31 +63,3 @@ mergeReactionEdgeDF <- function(pathwayId){
 
 
 
-### plus tard ortholog
-# completeSubProdOrthologReactions <- function(edgeDF){
-#
-#     #print(edgeDF[2]);
-#
-#     lapply(edgeDF$reactions,
-#            function (x) if(!is.na(x)) getMainReactions(getReactionInfo(x)));
-#
-#
-#
-# }
-
-
-## plus tard ortholog gene
-# getFinalEdgeList <- function(pathwayId){
-#
-#     # get list of edge reaction in KGML type gene and ortholog
-#     finalEdgeDF <- rBindOrthologAndGeneDataFrame(pathwayId);
-#
-#     # separate list of reactions in the same row in multiple rows
-#     finalEdgeDF <- unlistEdgeReactionCol(finalEdgeDF);
-#
-#     # correct string of reaction to utilise KEGGREST search
-#     finalEdgeDF <- correctReactionString(finalEdgeDF);
-#
-#     return <- finalEdgeDF;
-#
-# }

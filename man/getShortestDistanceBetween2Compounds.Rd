@@ -2,7 +2,7 @@
 % Please edit documentation in R/graphFunctions.R
 \name{getShortestDistanceBetween2Compounds}
 \alias{getShortestDistanceBetween2Compounds}
-\title{A graph function}
+\title{A igraph function}
 \usage{
 getShortestDistanceBetween2Compounds(g, c1, c2)
 }

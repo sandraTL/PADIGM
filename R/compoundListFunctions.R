@@ -7,7 +7,6 @@
 #' #### ortholog
 #' @param compounds data frame
 #' @keywords  compounds
-#' @export
 #' @examples getDataFrameOfDuplicateCompounds(compoundDataFrame)
 
 getDataFrameOfDuplicateCompounds <- function(compoundDataFrame){
@@ -21,6 +20,8 @@ getDataFrameOfDuplicateCompounds <- function(compoundDataFrame){
     compoundDataFrame <- compoundDataFrame[duplicated(compoundDataFrame[,2]), ];
 
     # dataframe with only duplicated metabolites
+
+
 
     duplicatedCompoundDataFrame <- data.frame(compoundDataFrame[2]);
 

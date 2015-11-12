@@ -2,7 +2,7 @@
 % Please edit documentation in R/parseXML.R
 \name{getListEdgeFromGeneKGML}
 \alias{getListEdgeFromGeneKGML}
-\title{A KEGGREST Function}
+\title{A KEGG Function}
 \usage{
 getListEdgeFromGeneKGML(pathwayId)
 }

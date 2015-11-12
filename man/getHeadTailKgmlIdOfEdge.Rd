@@ -2,7 +2,7 @@
 % Please edit documentation in R/graphFunctions.R
 \name{getHeadTailKgmlIdOfEdge}
 \alias{getHeadTailKgmlIdOfEdge}
-\title{A graph function}
+\title{A igraph function}
 \usage{
 getHeadTailKgmlIdOfEdge(g, hsaGene, reactionDF)
 }
@@ -10,8 +10,8 @@ getHeadTailKgmlIdOfEdge(g, hsaGene, reactionDF)
 \item{graphe,}{gene of interest, dataframe of reaction (edges) in the graph}
 }
 \description{
-function returning the nodes (sub, prod ) of the egdes representing the gene of
-interest
+function returning the nodes (sub, prod ) of the egdes representing the gene
+ of interest
 }
 \examples{
 getHeadTailKgmlIdOfEdge(g, hsa, reactionDF)
