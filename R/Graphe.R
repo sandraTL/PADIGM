@@ -141,7 +141,7 @@ getAllShortestDistances <- function(pathwayId, data){
 
   #  barplotFunction(graphe,finalDF,"hsa:6999", data);
   #  print(finalDF);
-
+    finalDF[is.na(finalDF)] <- Inf;
     return <- finalDF;
 
 
@@ -348,7 +348,7 @@ barplotFunction <- function(pathwayId, data, gene){
 
     shortestsPathsDF <- getAllShortestDistances(pathwayId, data);
     #graphe <-  createGraphFromPathway(pathwayId, data);
-print(shortestsPathsDF);
+
     associatedMetabo <- getAssociatedMetaboByGene(data,gene)
     aM <- data.frame(associatedMetabo);
 
@@ -362,9 +362,14 @@ print(shortestsPathsDF);
     # get a subset of shortestsPathsDF contaning only geneOf interest, gene
     # and metaboltie column
     spDF.sub2 <- subset(shortestsPathsDF ,select = c(gene1, "metabolites"))
-    spDF.sub2 <- na.omit(spDF.sub2)
+    spDF.sub2[is.na(spDF.sub2)] <- Inf;
 
-    #initiation of values
+
+    frequenceDistDF <- table(spDF.sub2[,gene1]);
+    frequenceDistDF <- data.frame(frequenceDistDF)
+
+
+   # initiation of values
     test = FALSE;
     results <- data.frame();
     # creation of vector to fill bar colors automatically
@@ -383,30 +388,74 @@ print(shortestsPathsDF);
         colnames(results) <- c("Associations")
         return <- results;
     }
-
-    # Add a column for the coloring of the bar associated with gene to subgraph
     shortestsPathsDF.plot<-spDF.sub2;
     shortestsPathsDF.plot<-cbind(shortestsPathsDF.plot, Associations = results);
 
-    # define plot function
-    plot <- ggplot2::ggplot(shortestsPathsDF.plot, ggplot2::aes(
-         x = metabolites,
-         y = shortestsPathsDF.plot[,1],
-         fill = Associations, color = Associations),environment = environment())
 
-    plot <- (plot + ggplot2::geom_bar(stat="identity", position = "dodge")
-     + ggplot2::theme_bw()
-     + ggplot2::theme(panel.border = ggplot2::element_blank(),
-                    panel.grid.major = ggplot2::element_blank(),
-                    panel.grid.minor = ggplot2::element_blank(),
-                    axis.line = ggplot2::element_line(colour = "black"))
-     + ggplot2::xlab("Metabolites")
-     + ggplot2::ylab("distance")
-     + ggplot2::labs(x='métabolites')
-     + ggplot2::ggtitle(gene)
-     + ggplot2::scale_color_manual(values = c("FALSE" ="grey", "TRUE" = "red"))
-     + ggplot2::scale_fill_manual(values = c("FALSE" ="grey", "TRUE" = "red"))
-     + ggplot2::guides(fill=FALSE));
+    #frequenceDistDF : var1=distances Freq=frequenceOfdistance
+    #shortestPathsDF.plot : dataframe with gene - metablite - true or false associations
+
+    # initiation of values
+    test = FALSE;
+    results1 <- data.frame();
+    # creation of vector to fill bar colors automatically
+    for(row1 in 1:nrow(frequenceDistDF)){
+        test = FALSE;
+        for(row2 in 1:nrow(shortestsPathsDF.plot)){
+
+            if(frequenceDistDF[row1,"Var1"] == shortestsPathsDF.plot[row2,gene1]){
+                if(shortestsPathsDF.plot[row2,"Associations"] == TRUE){
+                test<- TRUE;
+
+                break;
+                }
+            }else test<- FALSE;
+        }
+
+        results1 <- rbind(results1,test);
+        colnames(results1) <- c("Associations")
+        return <- results1;
+    }
+
+
+
+
+   # Add a column for the coloring of the bar associated with gene to subgraph
+    shortestsPathsDF.plot<-frequenceDistDF;
+    shortestsPathsDF.plot<-cbind(shortestsPathsDF.plot, Associations = results1);
+
+
+
+
+
+    plot <- ggplot2::ggplot(shortestsPathsDF.plot, ggplot2::aes(
+        x = Var1,
+        y = Freq,
+        fill = Associations,
+      #  color = Associations
+        ),environment = environment())
+
+    plot <- (plot + ggplot2::geom_bar(stat="identity"
+                                      #,position = "dodge"
+                                      )
+      + ggplot2::theme_bw()
+      + ggplot2::theme(panel.border = ggplot2::element_blank(),
+                     panel.grid.major = ggplot2::element_blank(),
+                     panel.grid.minor = ggplot2::element_blank(),
+                     axis.line = ggplot2::element_line(colour = "black"))
+      + ggplot2::xlab("Distance from Gene")
+      + ggplot2::ylab("Metabolite count")
+      + ggplot2::ggtitle(gene)
+    #  + ggplot2::scale_color_manual(values = c("FALSE" ="grey", "TRUE" = "red"))
+      + ggplot2::scale_fill_manual(values = c("FALSE" ="grey", "TRUE" = "red"))
+      + ggplot2::guides(fill=FALSE)
+     );
+
+
+
+
+
+
 
    # print plot it could change to save the graph image somewhere
    print(plot);
