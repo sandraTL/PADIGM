@@ -2,3 +2,4 @@
 
 export(barplotFunction)
 export(getAllShortestDistances)
+export(heatmapFunction)

@@ -431,7 +431,7 @@ barplotFunction <- function(pathwayId, data, gene){
     plot <- ggplot2::ggplot(shortestsPathsDF.plot, ggplot2::aes(
         x = Var1,
         y = Freq,
-        fill = Associations,
+        fill = Associations
       #  color = Associations
         ),environment = environment())
 
@@ -461,6 +461,58 @@ barplotFunction <- function(pathwayId, data, gene){
    print(plot);
 
 }
+
+#' HeatMap function, is using the result data.frame from getAllShortestDistances
+#' to create it. It uses the associations data form the users.
+#'
+#' @param keggpathwayId, data.frame() colunm c(gene, metabolites)
+#' representing association between them for each row, gene of interest
+#' @keywords  igraphe, heatmap, shortestDistance
+#' @export
+#' @examples heatmapFunction(hsa01100, data)
+
+heatmapFunction <- function(pathwayId, data){
+
+    AllSP <- getAllShortestDistances(pathwayId, data);
+
+    dat <- data.frame( Row = rep(row.names(b15), each= length(colnames(b15))),
+                       Col = rep(colnames(b15), times= length(row.names(b15))),
+                       Y = c(t(b15)),
+                       Associations = rep(c(TRUE,FALSE,FALSE,
+                                    FALSE,FALSE,FALSE,FALSE),times=9));
+
+
+
+    # create frame to color edges of associated genes and metabolites
+    frames = dat[dat$Associations, c("Row", "Col")]
+
+    frames$Row = as.integer(frames$Row)
+    frames$Col = as.integer(frames$Col)
+
+
+    p2 = ggplot2::ggplot(data=dat) +
+        ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Y)) +
+        ggplot2::theme(
+               panel.border = ggplot2::element_blank(),
+               panel.grid.major = ggplot2::element_blank(),
+               panel.grid.minor = ggplot2::element_blank()) +
+
+        ggplot2::scale_fill_gradient2(low="yellow",mid="orange", high="darkred", na.value="lightgrey", name="") +
+        ggplot2::geom_rect(data=frames, size=1, fill=NA, colour="black",
+            ggplot2::aes(xmin=Row - 0.5, xmax=Row + 0.5, ymin=Col - 0.5, ymax=Col + 0.5)) +
+        ggplot2::geom_text(fill = dat$Y, label = round(dat$Y, 1), ggplot2::aes(x = Row, y = Col)) +
+        ggplot2::labs(title="Heatmap")
+
+
+print(p2);
+
+
+
+
+
+
+}
+
 
 getAssociatedMetaboByGene <- function(data, gene){
 
