@@ -3,3 +3,4 @@
 export(barplotFunction)
 export(getAllShortestDistances)
 export(heatmapFunction)
+importFrom(igraph,shortest_paths)

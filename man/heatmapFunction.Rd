@@ -2,23 +2,23 @@
 % Please edit documentation in R/Graphe.R
 \name{heatmapFunction}
 \alias{heatmapFunction}
-\title{Fonction to barplot all the shortest paths between 1 gene of interest to all
-metabolites in the data value in entry}
+\title{HeatMap function, is using the result data.frame from getAllShortestDistances
+to create it. It uses the associations data form the users.}
 \usage{
 heatmapFunction(pathwayId, data)
 }
 \arguments{
-\item{keggpathwayId,}{data.frame() colunm c(gene, metabolites) representing association
-between them for each row, gene of interest}
+\item{keggpathwayId,}{data.frame() colunm c(gene, metabolites)
+representing association between them for each row, gene of interest}
 }
 \description{
-Fonction to barplot all the shortest paths between 1 gene of interest to all
-metabolites in the data value in entry
+HeatMap function, is using the result data.frame from getAllShortestDistances
+to create it. It uses the associations data form the users.
 }
 \examples{
 heatmapFunction(hsa01100, data)
 }
-\keyword{barplot,}
+\keyword{heatmap,}
 \keyword{igraphe,}
 \keyword{shortestDistance}
 
