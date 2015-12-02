@@ -62,7 +62,7 @@ setGeneric("allShortestPaths", function(object, data)
 #' fonction qui crée le grpah pour les calculs de distances, ne peut
 #' pas etre une methode de la classe Graphe cause des erreurs de profondeurs
 #' de calculs
-#'
+#' @importFrom igraph shortest_paths
 #' @param data frame des reactions extraites du KGML en listes
 #' @keywords  kegg
 #' @examples aLLShortestPaths(igraph, data)
@@ -73,7 +73,9 @@ setMethod("allShortestPaths","Graph", function(object, data){
         # Name column names by metabolite ids
          goalsMenu <- paste(data[,2], 1:length(data[,1]), sep="")
          output <- as.data.frame(matrix(rep(0, length(goalsMenu)), nrow=1))
+
          names(output) <- c(goalsMenu);
+
 
          # calcul al distances
          pl <-  apply(data, 1, function(x){
@@ -162,8 +164,8 @@ createGraphFromPathway <- function(pathwayId, data){
                    edgeDF= edgeDF, pathwayId = pathwayId);
 
     igraphe <- createIGraph(graphEl);
-    graphe <- new("Graph", graph = igraphe, graphEl);
 
+    graphe <- new("Graph", graph = igraphe, graphEl);
 
 
     return <- graphe;
@@ -507,10 +509,6 @@ heatmapFunction <- function(pathwayId, data){
 print(p2);
 
 
-
-
-
-
 }
 
 
@@ -522,6 +520,9 @@ getAssociatedMetaboByGene <- function(data, gene){
     return <- associatedMetabo;
 
 }
+
+
+
 
 
 

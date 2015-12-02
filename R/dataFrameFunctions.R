@@ -1,0 +1,5 @@
+testIfRowNameExistInDF <- function(dF, rowName){
+
+
+
+}

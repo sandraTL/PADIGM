@@ -12,3 +12,4 @@ Description: Complete the information from the KGML files obtained with
 License: Artistic-2.0
 Imports: igraph, XML, RUnit, ggplot2
 LazyData: TRUE
+Suggests: testthat
