@@ -127,7 +127,7 @@ getKGMLRootNode <- function(pathwayId){
 toStringPathFile <- function(pathwayId){
 
     #concatenation of pathwayId to set swdir for the xml
-    s1 <- "./data/";
+    s1 <- "/data/";
     s2 <-  toString(pathwayId);
     s3 <- ".xml"
     s4 <- paste(s1,s2, sep= "");
