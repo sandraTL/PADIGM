@@ -132,7 +132,7 @@ setMethod("allShortestPaths","Graph", function(object, data){
 getAllShortestDistances <- function(pathwayId, data){
 
     # if doesnt exist yet
-    # getPathwayKGML("hsa01100");
+    getPathwayKGML(pathwayId);
     #' create data frame for the vertices
 
     finalDF <- data.frame();
