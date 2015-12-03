@@ -133,6 +133,8 @@ getAllShortestDistances <- function(pathwayId, data){
 
     # if doesnt exist yet
     getPathwayKGML(pathwayId);
+#     download.file("rest.kegg.jp/get/hsa01100/kgml",
+#                   paste(datahere,"hsa01100.xml",sep=""), method = "curl")
     #' create data frame for the vertices
 
     finalDF <- data.frame();

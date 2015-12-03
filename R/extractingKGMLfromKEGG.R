@@ -14,13 +14,15 @@ getPathwayKGML <- function(pathwayId) {
     adressfile <- toStringAdressfile(pathwayId);
     destfile <- toStringDestfile(pathwayId);
 
+
     download.file(adressfile, destfile, method = "curl");
 
 }
 
 toStringDestfile <- function(pathwayId){
     #concatenation of pathwayId to set swdir for the xml
-    s1 <- "./data/";
+    s1 <- "~/";
+    setwd(datahere);
     s2 <-  toString(pathwayId);
     s3 <- ".xml"
     s4 <- paste(s1,s2, sep= "");
