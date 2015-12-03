@@ -22,7 +22,7 @@ getPathwayKGML <- function(pathwayId) {
 toStringDestfile <- function(pathwayId){
     #concatenation of pathwayId to set swdir for the xml
     s1 <- "~/";
-    setwd(datahere);
+    setwd(s1);
     s2 <-  toString(pathwayId);
     s3 <- ".xml"
     s4 <- paste(s1,s2, sep= "");
