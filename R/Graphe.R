@@ -132,7 +132,9 @@ setMethod("allShortestPaths","Graph", function(object, data){
 getAllShortestDistances <- function(pathwayId, data){
 
     # if doesnt exist yet
+    if(isFileInDirectory(pathwayId) == FALSE){
     getPathwayKGML(pathwayId);
+    }
 #     download.file("rest.kegg.jp/get/hsa01100/kgml",
 #                   paste(datahere,"hsa01100.xml",sep=""), method = "curl")
     #' create data frame for the vertices

@@ -42,3 +42,19 @@ toStringAdressfile <- function(pathwayId){
 
     return <- adressfile;
 }
+
+isFileInDirectory <- function(pathwayId){
+    #concatenation of pathwayId to set swdir for the xml
+    bool = FALSE;
+    s2 <-  toString(pathwayId);
+    s3 <- ".xml"
+
+    file <- paste(s2, s3, sep="");
+ m <- match(file, files, nomatch = NA_integer_, incomparables = NULL)
+
+    if(m != "na"){
+        bool = TRUE;
+    }
+
+    return <- bool;
+}
