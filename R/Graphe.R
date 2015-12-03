@@ -481,9 +481,9 @@ heatmapFunction <- function(pathwayId, data){
 
     AllSP <- getAllShortestDistances(pathwayId, data);
 
-    dat <- data.frame( Row = rep(row.names(b15), each= length(colnames(b15))),
-                       Col = rep(colnames(b15), times= length(row.names(b15))),
-                       Y = c(t(b15)),
+    dat <- data.frame( Row = rep(row.names(AllSP), each= length(colnames(AllSP))),
+                       Col = rep(colnames(AllSP), times= length(row.names(AllSP))),
+                       Y = c(t(AllSP)),
                        Associations = rep(c(TRUE,FALSE,FALSE,
                                     FALSE,FALSE,FALSE,FALSE),times=9));
 
