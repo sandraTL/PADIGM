@@ -51,8 +51,8 @@ isFileInDirectory <- function(pathwayId){
     s3 <- ".xml"
 
     file <- paste(s2, s3, sep="");
- m <- match(file, files, nomatch = NA, incomparables = NULL)
-print(m);
+    m <- match(file, files, nomatch = NA, incomparables = NULL)
+
     if(is.na(m) == FALSE){
         bool = TRUE;
     }
