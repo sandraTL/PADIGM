@@ -46,6 +46,7 @@ toStringAdressfile <- function(pathwayId){
 isFileInDirectory <- function(pathwayId){
     #concatenation of pathwayId to set swdir for the xml
     bool = FALSE;
+    files <- list.files("~/")
     s2 <-  toString(pathwayId);
     s3 <- ".xml"
 
