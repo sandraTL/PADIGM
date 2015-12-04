@@ -1,7 +1,9 @@
 
 
-#'Fonction qui sépare les listes de réactions : id R1... R2... R3... ko
-#'en plusieurs lignes avec les même id et le même ko.
+#'Function fractioning reaction list from every gene from KGML file
+#'
+#'
+#'exemple : id R1... R2... R3... ko
 #' -> id R1 ko
 #' -> id R2 ko
 #' -> id R3 ko
