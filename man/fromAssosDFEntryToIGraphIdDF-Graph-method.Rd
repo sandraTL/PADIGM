@@ -29,7 +29,7 @@ where data is (gene, metabolite)
 where indice metabolites is only 1 or 2
 }
 \examples{
-fromDFEntryToIGraphIdDF(g, data, indexMetabolite)
+fromAssosDFEntryToIGraphIdDF(g, data, indexMetabolite)
 }
 \keyword{igraph,}
 \keyword{kgmlId}

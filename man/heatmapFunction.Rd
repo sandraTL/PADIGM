@@ -3,7 +3,7 @@
 \name{heatmapFunction}
 \alias{heatmapFunction}
 \title{function that output a heatmap graph showing all results
- from getAllShortestDistances function}
+ from getDistanceAll function}
 \usage{
 heatmapFunction(pathwayId, data)
 }

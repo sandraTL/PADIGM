@@ -65,7 +65,9 @@ getCompoundNodeKgmlId <- function(g, compoundKeggId, nodeDF){
     if(length(x) > 0 ){
        # print(x)
         x <- igraph::V(g)[x[1]];
+
         x <- x$name
+       # print(x)
     } else{
         x <- NA;
     }

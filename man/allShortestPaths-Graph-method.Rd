@@ -6,7 +6,8 @@
 \title{function that uses the object Graph and calculs distances for every pair of
 gene - metabolite from data.}
 \usage{
-\S4method{allShortestPaths}{Graph}(object, data)
+\S4method{allShortestPaths}{Graph}(object, associatedGeneMetaDF,
+  completeMetaboliteDF)
 }
 \arguments{
 \item{object}{Graph, data(mg, m, genes, metabolites)}
@@ -23,7 +24,7 @@ from the other vertice to all metabolites and then
 choose the smallest distance between the 2.
 
 The selection of the first vertice and the second vertice is done in a other
-function 'fromDFEntryToIGraphIdDF'
+function 'getIdGeneInGraph'
 
 param data where
  mg = id (from igraph in object Graph) of 1 metabolite related to the gene

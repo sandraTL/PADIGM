@@ -5,14 +5,15 @@
 \alias{getFinalDFSHortestDistance,Graph-method}
 \title{A igraph function}
 \usage{
-\S4method{getFinalDFSHortestDistance}{Graph}(object, data)
+\S4method{getFinalDFSHortestDistance}{Graph}(object, associatedGeneMetaDF,
+  completeMetaboliteDF)
 }
 \arguments{
 \item{graphe,}{kegg id of compound of interest, dataframe of compounds
 (nodes)}
 }
 \description{
-Calls fromDFEntryToIGraphIdDF() twice to get :
+Calls getIdGeneInGraph() twice to get :
 Modification of dataframe giving in entry by user, from
 c("gene", "metabolite") to 2 dataFrame
 where indexMetabolite = 1

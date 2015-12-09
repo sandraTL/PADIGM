@@ -5,7 +5,7 @@
 \title{function that output a barplot graph related to one specific gene with all
 the shortest distances from that gene to all metabolites}
 \usage{
-barplotFunction(pathwayId, data, gene)
+barplotFunction(pathwayId, associatedGeneMetaDF, completeMetaboliteDF, gene)
 }
 \arguments{
 \item{pathwayId,}{data(gene, metabolites), gene}
@@ -18,7 +18,8 @@ for param pathwayId : KEGG id of pathways without ':' ex: hsa01100
 for param gene : is a gene in data ex: hsa:8801
 }
 \examples{
-barplotFunction(hsa01100, data, gene)
+barplotFunction(hsa01100, associatedGeneMetaDF,
+ completeMetaboliteDF, gene)
 }
 \keyword{Graph,}
 \keyword{barplot,}
