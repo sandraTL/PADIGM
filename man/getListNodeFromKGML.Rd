@@ -3,7 +3,7 @@
 \name{getListNodeFromKGML}
 \alias{getListNodeFromKGML}
 \title{This function extract from KGML a list of metabolites (id and name) that
-makes the nodes of the graph ** some metablite can form more than 1 node,
+makes the nodes of the graph ** some metablite can from more than 1 node,
 which is why the id of the nodes is not the name of the metabolite.
 data.frame (id, keggId)}
 \usage{
@@ -14,7 +14,7 @@ getListNodeFromKGML(pathwayId)
 }
 \description{
 This function extract from KGML a list of metabolites (id and name) that
-makes the nodes of the graph ** some metablite can form more than 1 node,
+makes the nodes of the graph ** some metablite can from more than 1 node,
 which is why the id of the nodes is not the name of the metabolite.
 data.frame (id, keggId)
 }

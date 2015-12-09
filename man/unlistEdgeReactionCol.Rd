@@ -2,11 +2,7 @@
 % Please edit documentation in R/edgeListFunctions.R
 \name{unlistEdgeReactionCol}
 \alias{unlistEdgeReactionCol}
-\title{Fonction qui sépare les listes de réactions : id R1... R2... R3... ko
-en plusieurs lignes avec les même id et le même ko.
--> id R1 ko
--> id R2 ko
--> id R3 ko}
+\title{Function fractioning reaction list from every gene from KGML file}
 \usage{
 unlistEdgeReactionCol(edgeDataFrame)
 }
@@ -14,8 +10,7 @@ unlistEdgeReactionCol(edgeDataFrame)
 \item{data}{frame des reactions extraites du KGML en listes}
 }
 \description{
-Fonction qui sépare les listes de réactions : id R1... R2... R3... ko
-en plusieurs lignes avec les même id et le même ko.
+exemple : id R1... R2... R3... ko
 -> id R1 ko
 -> id R2 ko
 -> id R3 ko

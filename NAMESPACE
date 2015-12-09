@@ -2,5 +2,6 @@
 
 export(barplotFunction)
 export(getAllShortestDistances)
+export(getDistancesForAssoMetabo)
 export(heatmapFunction)
 importFrom(igraph,shortest_paths)
