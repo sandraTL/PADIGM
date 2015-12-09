@@ -139,13 +139,11 @@ setMethod("allShortestPaths","Graph", function(object, data){
 })
 
 
-
 setGeneric("associatedShortestPaths", function(object, data)
 {
     standardGeneric("associatedShortestPaths")
 }
 )
-
 
 #' function that uses the object Graph and calculs distances for every pair of
 #' gene - metabolite from data.
@@ -173,12 +171,9 @@ setGeneric("associatedShortestPaths", function(object, data)
 #' @keywords  kegg
 #' @examples associatedShortestPaths(Graph, data)
 
-
 setMethod("associatedShortestPaths","Graph", function(object, data){
 
-
     #'calcul al distances
-
     pl <-  apply(data,1, function(x){
 
         dfTemp <- data.frame();
@@ -193,19 +188,16 @@ setMethod("associatedShortestPaths","Graph", function(object, data){
         return <- dfTemp;
     })
 
-
     #' choosing smallest distance between the two metabolites of gene and
     #' all metabolites
     outputFinal <- data.frame();
     output <- NULL;
     pl1 <- lapply(pl, function(x){
 
-
        if(!is.na(x)){
        lengthPath <- length(x$vpath[[1]])
 
         output <- lengthPath;
-
             #' if length of path is 0 -> couldnt reach a path
             #' if length of path is >0 i have to do length -1
             #' for example path i am lookinf for path from 1523 to 1523
@@ -222,20 +214,10 @@ setMethod("associatedShortestPaths","Graph", function(object, data){
     })
 
     outputFinal <- rbind(outputFinal, pl1)
-
     outputFinal <- t(outputFinal)
     colnames(outputFinal) <- c("lengthShortestPath")
-
-    # combine all vectors of distances
-   # df <- do.call(rbind.data.frame, pl1)
-
     return <- outputFinal;
 })
-
-
-
-
-
 
 
 #' Fonction that calculates every shortest distances between each gene and
@@ -264,7 +246,6 @@ getAllShortestDistances <- function(pathwayId, associatedGeneMetaDF){
          getPathwayKGML(pathwayId);
     }
 
-
     if(!is.data.frame(associatedGeneMetaDF) || length(associatedGeneMetaDF[1,])< 2 ||
                                         length(associatedGeneMetaDF[1,])> 3){
         e <- simpleError("dataframe dimension is wrong, please enter you data
@@ -279,11 +260,8 @@ getAllShortestDistances <- function(pathwayId, associatedGeneMetaDF){
     }else{
 
     finalDF <- data.frame();
-
     #graph creation
     graphe <-  createGraphFromPathway(pathwayId, associatedGeneMetaDF);
-
-
     finalDF <- getFinalDFSHortestDistance(graphe, associatedGeneMetaDF);
 
     # Change Na in finalDF to Inf value
@@ -312,7 +290,7 @@ getAllShortestDistances <- function(pathwayId, associatedGeneMetaDF){
 #' @keywords KEGG
 #' @export
 #' @examples getDistancesForAssoMetabo(pathwayId, data)
-getDistancesForAssoMetabo <- function(pathwayId, data){
+getDistancesForAssoMetabo <- function(pathwayId, data, ordered){
 
     #if the xml file was already dowmloaded
     if(isFileInDirectory(pathwayId) == FALSE){
@@ -328,12 +306,14 @@ getDistancesForAssoMetabo <- function(pathwayId, data){
     finalDF <- getFinalAssoDfSd(graphe, data);
 
     # Change Na in finalDF to Inf value
-
     finalDF <- changeDFassosToRigthDistances(finalDF);
 
     # order result by increasing distances
     finalDF[is.na(finalDF)] <- NaN;
+
+    if(ordered == TRUE){
     finalDF <- finalDF[ order(finalDF[,5]), ]
+    }
 
     #finalDF <- finalDF[,order('lengthShortestPath')]
 
@@ -342,7 +322,6 @@ getDistancesForAssoMetabo <- function(pathwayId, data){
 
 
 }
-
 
 changeDFassosToRigthDistances <- function(associatedShortestPathsDF){
 
@@ -363,11 +342,6 @@ changeDFassosToRigthDistances <- function(associatedShortestPathsDF){
  return <- associatedShortestPathsDF;
 
 }
-
-
-
-
-
 
 createGraphFromPathway <- function(pathwayId, data){
 
@@ -459,12 +433,6 @@ setMethod("fromDFEntryToIGraphIdDF", "Graph", function(object, data,
 
 })
 
-
-
-
-
-
-
 setGeneric("fromAssosDFEntryToIGraphIdDF", function(object, data,
                                                indexMetabolite) {
     standardGeneric("fromAssosDFEntryToIGraphIdDF");
@@ -521,10 +489,6 @@ setMethod("fromAssosDFEntryToIGraphIdDF", "Graph", function(object, data,
     return <- f;
 
 })
-
-
-
-
 
 
 setGeneric("getFinalDFSHortestDistance", function(object, data)
@@ -601,13 +565,6 @@ setMethod("getFinalDFSHortestDistance", "Graph", function(object, data){
 
    return <- finalDF;
 })
-
-
-
-
-
-
-
 
 
 setGeneric("getFinalAssoDfSd", function(object, data)
