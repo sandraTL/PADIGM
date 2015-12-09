@@ -14,6 +14,7 @@ getListNodeFromKGML <- function(pathwayId) {
 
     xmltop <- getKGMLRootNode(pathwayId);
 
+
     nodeListId <- XML::xpathSApply(xmltop, "//entry[@type = 'compound']",
                                    function(x) (XML::xmlAttrs(x))['id']);
     nodeListCpd <- XML::xpathSApply(xmltop, "//entry[@type = 'compound']",
@@ -22,7 +23,9 @@ getListNodeFromKGML <- function(pathwayId) {
                                 "keggId" = as.vector(nodeListCpd));
 
     nodeDF <- correctKeggIdString(nodeDF);
+
     return <- nodeDF;
+
 }
 
 
@@ -41,6 +44,7 @@ getListReactionFromKGML <- function(pathwayId) {
 
     #gives content of root
     xmltop <- getKGMLRootNode(pathwayId);
+
 
     reactionIdNodes <- XML::getNodeSet(xmltop, "//reaction");
 
@@ -115,8 +119,29 @@ getListEdgeFromGeneKGML <- function(pathwayId) {
 getKGMLRootNode <- function(pathwayId){
     #get the root of the KGML document
     pathFile <- toStringPathFile(pathwayId);
+
+
+
+#               handleMySimpleError<-function(e, text) {
+#                    # Let's log the error
+#                        print(paste0(text, ": ", e))
+#                   # This should stop execution of any further steps but it doesn't
+#                        stop("Now, stop. For real.")
+#                }
+#                print("Starting execution...")
+#                tryCatch(
+#                        stop("My simple error."),
+#                        error=function(e) {handleMySimpleError(e, "could not finish due to")}, finally=NULL
+#                   )
+#                print("Successfully ended execution...")
+#              }
+
+
+    if(is.na(file.info(pathFile)$size) == FALSE){
     xmlfile <- XML::xmlParse(pathFile);
+
     xmltop <- XML::xmlRoot(xmlfile); #gives content of root
+    } else xmltop = NULL;
 
     return <- xmltop;
 

@@ -34,7 +34,7 @@ getHeadTailKgmlIdOfEdge <- function(g, hsaGene,  reactionDF){
 
     nodesVector1 <- c(as.character(sub), as.character(prod));
     }else{
-        nodesVector1 <-c("na","na")
+        nodesVector1 <-c(NA,NA)
     }
 
     return <- nodesVector1;
@@ -67,7 +67,7 @@ getCompoundNodeKgmlId <- function(g, compoundKeggId, nodeDF){
         x <- igraph::V(g)[x[1]];
         x <- x$name
     } else{
-        x <- "na";
+        x <- NA;
     }
     return <- x;
 
