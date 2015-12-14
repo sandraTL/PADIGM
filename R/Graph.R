@@ -705,6 +705,8 @@ heatmapFunction <- function(pathwayId, data){
                                    ,FALSE,FALSE,FALSE,FALSE,FALSE),times=21)
 
                        );
+
+
 #     Associations = rep(c(TRUE,FALSE,FALSE,
 #                          FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,
 #                          FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,
@@ -716,20 +718,22 @@ heatmapFunction <- function(pathwayId, data){
     frames$Row = as.integer(frames$Row)
     frames$Col = as.integer(frames$Col)
 
-    # create heatmap graph
-    p2 = ggplot2::ggplot(data=dat) +
-        ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Y)) +
-        ggplot2::theme(
-               panel.border = ggplot2::element_blank(),
-               panel.grid.major = ggplot2::element_blank(),
-               panel.grid.minor = ggplot2::element_blank()) +
-    #      ggplot2::scale_fill_gradient2(low = "#0000FF", mid = "#FFFFFF", high ="#FF0000",
-    #                                    na.value="lightgrey", name="")+
+    # from discrete to continuous values...
+    dat$Y <- as.numeric(as.character(dat$Y))
 
-        ggplot2::geom_rect(data=frames, size=1, fill=NA, colour="black",
-        ggplot2::aes(xmin=Row - 0.5, xmax=Row + 0.5, ymin=Col - 0.5, ymax=Col + 0.5)) +
-        ggplot2::geom_text(fill = dat$Y, label = dat$Y, ggplot2::aes(x = Row, y = Col)) +
-        ggplot2::labs(title="Heatmap")
+    p2 = ggplot2::ggplot(data=dat) +
+       ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Y)) +
+       ggplot2::theme(
+           panel.border = ggplot2::element_blank(),
+           panel.grid.major = ggplot2::element_blank(),
+           panel.grid.minor = ggplot2::element_blank()) +
+       ggplot2::scale_fill_gradient2(low="yellow", mid = "orangered", high="red4",
+                       na.value="lightgrey", name="", midpoint = median(10))+
+       ggplot2::geom_rect(data=frames, size=1, fill=NA, colour="black",
+       ggplot2::aes(xmin=Row-0.5, xmax=Row+0.5, ymin=Col-0.5, ymax=Col + 0.5)) +
+       ggplot2::geom_text(fill = dat$Y, label = round(as.numeric(dat$Y, 1)),
+                          ggplot2::aes(x = Row, y = Col)) +
+       ggplot2::labs(title="Heatmap")
 
 
         print(p2);
