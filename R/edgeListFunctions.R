@@ -50,6 +50,8 @@ correctReactionString <- function(edgeDF){
 
 finalReactionEdgeDF <- function(pathwayId){
 
+  #  print("finalReactionEdgeDF")
+
     edgeDF <- getListEdgeFromGeneKGML(pathwayId);
     reactionDF <- getListReactionFromKGML(pathwayId);
     reactionDF <- as.data.frame(lapply(reactionDF,

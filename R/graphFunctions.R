@@ -53,7 +53,8 @@ getHeadTailKgmlIdOfEdge <- function(g, hsaGene,  reactionDF){
 
 getCompoundNodeKgmlId <- function(g, compoundKeggId, nodeDF){
 
-    x <-grep(compoundKeggId, nodeDF$keggId)
+
+    listId <-grep(compoundKeggId, nodeDF$keggId)
 
     #########################################################################
     #########################################################################
@@ -62,16 +63,25 @@ getCompoundNodeKgmlId <- function(g, compoundKeggId, nodeDF){
     #########################################################################
     #########################################################################
 
-    if(length(x) > 0 ){
-       # print(x)
-        x <- igraph::V(g)[x[1]];
+    if(length(listId) > 1 ){
 
-        x <- x$name
-       # print(x)
+         f<- lapply(listId, function(x) {
+
+             temp <- igraph::V(g)[x[1]];
+             temp <- temp$name
+             return <- temp;
+         })
+
+         temp<- f;
+    }else if(length(listId) == 1){
+        temp <- igraph::V(g)[listId[1]];
+        temp <- temp$name;
+
     } else{
-        x <- NA;
+        temp <- NA;
     }
-    return <- x;
+
+    return <- temp;
 
 }
 #      AM I USING THIS
