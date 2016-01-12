@@ -7,11 +7,20 @@
 \usage{
 \S4method{getIdGeneInGraph}{Graph}(object, associatedGeneMetaDF,
   indexMetabolite)
+
+\S4method{getIdGeneInGraph}{Graph}(object, associatedGeneMetaDF,
+  indexMetabolite)
 }
 \arguments{
 \item{Graph,}{data, indexMetabolites}
+
+\item{Graph,}{data, indexMetabolites}
 }
 \description{
+Modification of dataframe giving in entry by user, from
+c("gene", "metabolite") to a dataFrame contaning one metabolite associated
+with the gene edge in the Graph by adding igraph id from Graph object
+
 Modification of dataframe giving in entry by user, from
 c("gene", "metabolite") to a dataFrame contaning one metabolite associated
 with the gene edge in the Graph by adding igraph id from Graph object
@@ -28,8 +37,21 @@ d2 = c("metabolite2giIdIniGraph", "metabolitesIdIniGraph")
 where Graph param is the Graph object
 where data is (gene, metabolite)
 where indice metabolites is only 1 or 2
+
+indcieMetabolite selects either the first or second metabolite related to
+that gene
+
+if indexMetabolite = 1
+d1 = c("metabolite1giIdIniGraph", "metabolitesIdIniGraph")
+if indexMetabolite = 2
+d2 = c("metabolite2giIdIniGraph", "metabolitesIdIniGraph")
+
+where Graph param is the Graph object
+where data is (gene, metabolite)
+where indice metabolites is only 1 or 2
 }
 \examples{
+getIdGeneInGraph(g, data, indexMetabolite)
 getIdGeneInGraph(g, data, indexMetabolite)
 }
 \keyword{igraph,}

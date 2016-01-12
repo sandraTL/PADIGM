@@ -1,6 +1,3 @@
-
-
-
 #'
 #' This function extract from KGML a list of metabolites (id and name) that
 #' makes the nodes of the graph ** some metablite can from more than 1 node,
@@ -120,23 +117,6 @@ getKGMLRootNode <- function(pathwayId){
     #get the root of the KGML document
     pathFile <- toStringPathFile(pathwayId);
 
-
-
-#               handleMySimpleError<-function(e, text) {
-#                    # Let's log the error
-#                        print(paste0(text, ": ", e))
-#                   # This should stop execution of any further steps but it doesn't
-#                        stop("Now, stop. For real.")
-#                }
-#                print("Starting execution...")
-#                tryCatch(
-#                        stop("My simple error."),
-#                        error=function(e) {handleMySimpleError(e, "could not finish due to")}, finally=NULL
-#                   )
-#                print("Successfully ended execution...")
-#              }
-
-
     if(is.na(file.info(pathFile)$size) == FALSE){
     xmlfile <- XML::xmlParse(pathFile);
 
@@ -161,6 +141,38 @@ toStringPathFile <- function(pathwayId){
     return <- pathFile;
 }
 
+getCommonNames <- function(vectorOfKEGGIds){
 
+    ### Vérifiez la connection internet
+    if(length(vectorOfKEGGIds) > 10 ){
+        count <- 0;
+        names <- character();
+        while(count <= length(vectorOfKEGGIds)){
+            oldcount <- count + 1;
+            count <- count + 10;
+            query <- KEGGREST::keggGet(vectorOfKEGGIds[oldcount:count])
+            lenghtOfQuery <- length(query[])
 
+            names1 <- lapply(query[], function(x){
+                # return the first name of list of genes or metabolites
+                tempName <- unlist(strsplit(x$NAME[1], "[,;]"))[1];
+
+            return <- tempName;
+
+          } )
+          names <- append(names,names1)
+        }
+      names <- do.call(rbind, names);
+    }else{
+            query <- KEGGREST::keggGet(vectorOfKEGGIds)
+            lenghtOfQuery <- length(query[])
+            names <- lapply(query[], function(x){
+                # return the first name of list of genes
+                tempName <- unlist(strsplit(x$NAME[1], "[,;]"))[1];
+                return <- tempName;
+            } )
+            names <- do.call(rbind, names);
+    }
+    return <- names;
+}
 

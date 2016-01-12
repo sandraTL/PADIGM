@@ -59,3 +59,19 @@ isFileInDirectory <- function(pathwayId){
 
     return <- bool;
 }
+
+
+
+toCompoundAdressfile <- function(compoundKeggId){
+
+
+    #    http://rest.kegg.jp/list/G00092
+
+    s1 <- "rest.kegg.jp/list/";
+    s2 <-  toString(compoundKeggId);
+
+    adressfile <- paste(s1,s2, sep= "");
+  #  adressfile <- paste(s4, s3, sep="");
+
+    return <- adressfile;
+}

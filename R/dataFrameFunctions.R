@@ -33,14 +33,53 @@ return <- df;
 }
 
 
-removeRowsWithConditions <- function(df){
+removeRowsDistanceAsso <- function(df){
 
-        df %>%
-        group_by(df[,1], df[,2]) %>%
-        arrange(distance) %>% # in each group, arrange in ascending order by distance
-        filter(row_number() == 1)
+    # df$geneKEGGId <- factor(df$metabolites, levels=unique(df$metabolites))
+    df$geneKEGGId <- I(df$geneKEGGId)
+    df$metaboliteKEGGId <- I(df$metaboliteKEGGId)
 
-        return <- df;
+    aa <- split(df, list(df$metaboliteKEGGId,df$geneKEGGId),drop = TRUE)
+
+    f <- lapply(aa ,function(x){
+
+        tempDF <- data.frame(x)
+
+        tempDF <- tempDF[order(tempDF[,7]),]
+        return <-tempDF[1,]
+    })
+
+    finalDF <- do.call(rbind.data.frame, f)
+    row.names(finalDF) <- row.names(1:length(finalDF[,1]))
+    return <- finalDF;
 
 }
+
+removeRowsDistanceAll <- function(df){
+
+    df$geneKEGGId <- I(df$geneKEGGId)
+    aa <- split(df, list(df$geneKEGGId),drop = TRUE)
+    nbreOfCol <- ncol(df) -1
+
+    f <- lapply(aa ,function(x){
+
+        tempDF <- data.frame(x)
+        tempDF <- apply(tempDF,2,sort,decreasing=F)
+
+        if((length(tempDF)/ncol(df)) == 1){
+            tempDF <- as.data.frame(tempDF)
+            tempDF <- as.data.frame(t(tempDF))
+        }else tempDF <- as.data.frame(tempDF)
+        return <-tempDF[1,]
+    })
+
+    finalDF <- do.call(rbind.data.frame, f)
+    return <- finalDF;
+
+}
+
+
+
+
+
 

@@ -10,31 +10,48 @@
 getHeadTailKgmlIdOfEdge <- function(g, hsaGene,  reactionDF){
 
     # return lines of DF that contains hsa gene
-    x <-grep(hsaGene, reactionDF$ko)
 
-     # get node object of the same id
-    #########################################################################
-    #########################################################################
-    ###                   PUT THIS IN Graph class                        ####
-    ###        Here's where we should use code for permutation test      ####
-    ###           ADD CONDITION FOR WHEN IS IN MULTIPLE NODES            ####
-    #########################################################################
-    #########################################################################
+    listId <-grep(hsaGene, reactionDF$ko)
+
+
     nodesVector1 <- data.frame();
-    if(length(x) > 0){
+    if(length(listId) > 1){
+      #  print("getHeadTailKgmlIdOfEdge---------1")
+      f<- lapply(listId, function(x) {
 
-    nodesVector <- as.vector(igraph::get.edges(g, igraph::E(g)[x[1]]));
+        nodesVector <- as.vector(igraph::get.edges(g, igraph::E(g)[x[1]]));
+        gene <- c(as.character(hsaGene))
+        sub <- c(as.character(igraph::V(g)[nodesVector[1]]$name));
+        prod <- c(as.character(igraph::V(g)[nodesVector[2]]$name));
 
-    # from data frame id toi kgmlId(used in graph)
-    sub <- igraph::V(g)[nodesVector[1]];
-    prod <- igraph::V(g)[nodesVector[2]];
+        nodesVector1 <- data.frame(gene, sub, prod);
 
-    sub <- sub$name;
-    prod <- prod$name;
+            return <- nodesVector1;
+        })
 
-    nodesVector1 <- c(as.character(sub), as.character(prod));
+         nodesVector1 <- f;
+         nodesVector1 <- do.call(rbind.data.frame, nodesVector1)
+
+    }else if(length(listId) == 1){
+
+       # print("getHeadTailKgmlIdOfEdge---------2")
+      nodesVector <- as.vector(igraph::get.edges(g, igraph::E(g)[listId[1]]));
+      # from data frame id toi kgmlId(used in graph)
+      gene <- c(as.character(hsaGene))
+      sub <- c(as.character(igraph::V(g)[nodesVector[1]]$name));
+      prod <- c(as.character(igraph::V(g)[nodesVector[2]]$name));
+
+
+      nodesVector1 <- data.frame(gene, sub, prod);
+
     }else{
-        nodesVector1 <-c(NA,NA)
+
+      #  print("getHeadTailKgmlIdOfEdge---------3")
+        gene <- c(as.character(hsaGene))
+        sub <- c(NA)
+        prod <- c(NA)
+        nodesVector1 <-data.frame(gene, sub,prod)
+
     }
 
     return <- nodesVector1;
