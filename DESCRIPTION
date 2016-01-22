@@ -10,7 +10,7 @@ Description: Complete the information from the KGML files obtained with
              KEGGREST and calculate de distance between genes (enzymes,
              reactions) and metabolites in metabolic pathways.
 License: Artistic-2.0
-Imports: igraph, XML, RUnit, ggplot2, data.table, dplyr, KEGGREST
+Imports: igraph, XML, RUnit, ggplot2, data.table, dplyr, KEGGREST,xlsx
 Suggests: testthat
 LazyData: TRUE
 

@@ -16,7 +16,7 @@ getHeadTailKgmlIdOfEdge <- function(g, hsaGene,  reactionDF){
 
     nodesVector1 <- data.frame();
     if(length(listId) > 1){
-      #  print("getHeadTailKgmlIdOfEdge---------1")
+       # print("getHeadTailKgmlIdOfEdge---------1")
       f<- lapply(listId, function(x) {
 
         nodesVector <- as.vector(igraph::get.edges(g, igraph::E(g)[x[1]]));
@@ -53,7 +53,7 @@ getHeadTailKgmlIdOfEdge <- function(g, hsaGene,  reactionDF){
         nodesVector1 <-data.frame(gene, sub,prod)
 
     }
-
+    #print(nodesVector1)
     return <- nodesVector1;
 
 }

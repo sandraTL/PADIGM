@@ -141,7 +141,7 @@ toStringPathFile <- function(pathwayId){
     return <- pathFile;
 }
 
-getCommonNames <- function(vectorOfKEGGIds){
+getCommonNames <- function(vectorOfKEGGIds, type = c("gene","metabolite")){
 
     ### Vérifiez la connection internet
     if(length(vectorOfKEGGIds) > 10 ){
@@ -155,7 +155,11 @@ getCommonNames <- function(vectorOfKEGGIds){
 
             names1 <- lapply(query[], function(x){
                 # return the first name of list of genes or metabolites
-                tempName <- unlist(strsplit(x$NAME[1], "[,;]"))[1];
+                if(type == "gene"){
+                    tempName <- unlist(strsplit(x$NAME[1], "[,]"))[1];
+                }else if(type == "metabolite"){
+                    tempName <- unlist(strsplit(x$NAME[1], "[;]"))[1];
+                }
 
             return <- tempName;
 
@@ -167,12 +171,23 @@ getCommonNames <- function(vectorOfKEGGIds){
             query <- KEGGREST::keggGet(vectorOfKEGGIds)
             lenghtOfQuery <- length(query[])
             names <- lapply(query[], function(x){
-                # return the first name of list of genes
-                tempName <- unlist(strsplit(x$NAME[1], "[,;]"))[1];
+                 # return the first name of list of genes
+
+                if(type == "gene"){
+                    tempName <- unlist(strsplit(x$NAME[1], "[,]"))[1];
+                }else if(type == "metabolite"){
+                    tempName <- unlist(strsplit(x$NAME[1], "[;]"))[1];
+                }
                 return <- tempName;
             } )
             names <- do.call(rbind, names);
     }
     return <- names;
 }
+
+
+
+
+
+
 

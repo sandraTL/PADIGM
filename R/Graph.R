@@ -92,12 +92,13 @@ setMethod("allShortestPaths","Graph", function(object, associatedGeneMetaDF,
          output <- as.data.frame(matrix(rep(0, length(goalsMenu)), nrow=1))
          names(output) <- c(goalsMenu);
 
-         #'calcul al distances
+         #'calcul all distances
          pl <-  apply( associatedGeneMetaDF, 1, function(x){
 
              dfTemp <- data.frame();
 
              dfTemp <- (igraph::shortest_paths(object@graph , x[2],
+
              as.vector(unlist(completeMetaboliteDF[,1]))))
 
         return <- dfTemp;
@@ -175,12 +176,14 @@ setMethod("associatedShortestPaths","Graph", function(object, data){
     pl <-  apply(data,1, function(x){
 
         dfTemp <- data.frame();
+
         if(is.na(x['metaboliteGraphId']) || is.na(x['geneGraphId'])){
 
             dfTemp <- NA;
         }else{
-        dfTemp <- (igraph::shortest_paths(object@graph , x['metaboliteGraphId']
-                                         ,x['geneGraphId']))
+        dfTemp <- (igraph::shortest_paths(object@graph
+                                 ,x['geneGraphId'], x['metaboliteGraphId']))
+
         }
 
 
@@ -268,8 +271,7 @@ getDistanceAsso <- function(pathwayId, data, ordered = FALSE){
     if(ordered == TRUE){
     finalDF <- finalDF[ order(finalDF[,7]), ]
     }
-    print("distance ASSSo")
-     print(finalDF)
+
     ######################################################################
     ######################################################################
     ######## Could had information on the nodes or the multiple   ########
@@ -279,11 +281,32 @@ getDistanceAsso <- function(pathwayId, data, ordered = FALSE){
 
      finalDF <- removeRowsDistanceAsso(finalDF)
 
+
+
+
      rowNumbers <- 1:length(finalDF[,1])
      row.names(finalDF) <- row.names(1:length(finalDF[,1]))
      finalDF <- subset(finalDF, , c(2,3,5,6,7))
 
-    return <- finalDF;
+     geneCommonName <- getCommonNames(as.vector(unlist(finalDF[,1])), "gene")
+     geneCommonName <- as.vector(unlist(geneCommonName))
+
+     metaboliteCommonName <- getCommonNames(as.vector(unlist(finalDF[,3])),
+                                                                 "metabolite")
+     metaboliteCommonName <- as.vector(unlist(metaboliteCommonName))
+
+
+    finalDF1 <- data.frame("geneCommonName" = geneCommonName,
+                           "geneKEGGId" = finalDF[,1],
+                           "isGeneInGraph" = finalDF[,2],
+                           "metaboliteCommonName" = metaboliteCommonName,
+                           "metaboliteKEGGId" = finalDF[,3],
+                           "isMetaboliteInGraph" = finalDF[,4],
+                           "distance" = finalDF[,5]);
+
+   # return <- finalDF1;
+    write.table(finalDF1, file = "AssociatedDataDistance.txt",sep="\t"
+                ,row.names=FALSE);
 
 }
 
@@ -379,7 +402,7 @@ setMethod("getIdGeneInGraph", "Graph", function(object,
 
     f <- f[rowSums(is.na(f)) != 1,] # delete rows with 2 NA or more
     colnames(f) <- c("mg","genes") #set colnames
-    print(f)
+
     return <- f;
 
 })
@@ -418,14 +441,13 @@ setMethod("fromAssosDFEntryToIGraphIdDF", "Graph", function(object, data,
     #####  Add condition to insure indexMetabolite can only be 1 or 2   #####
     #########################################################################
 
-
     completeAssoDF <- data.frame();
     f <- apply(data,1, function(x){
-    #   print("fromAssosDFEntryToIGraphIdDF---------1")
+        #  print("fromAssosDFEntryToIGraphIdDF---------1")
         # ' get both metabolites id from Graph related to the gene of data
         m1 <- getHeadTailKgmlIdOfEdge(object@graph , x[1], object@edgeDF);
-        print(m1)
-    #    print("fromAssosDFEntryToIGraphIdDF---------2")
+
+        # print("fromAssosDFEntryToIGraphIdDF---------2")
         # ' get metabolites id from Graph of data
         m2 <- getCompoundNodeKgmlId(object@graph, x[2], object@nodeDF);
 
@@ -436,10 +458,8 @@ setMethod("fromAssosDFEntryToIGraphIdDF", "Graph", function(object, data,
           #  print("fromAssosDFEntryToIGraphIdDF---------3")
             f1 <- lapply(m2, function(x){
                 tempMetabolite <- x;
-
-
                 if(length(m1[,1]) > 1){
-                #    print("fromAssosDFEntryToIGraphIdDF---------4")
+                  #  print("fromAssosDFEntryToIGraphIdDF---------4")
                     f2 <- lapply(m1[,indexMetabolite+1], function(x){
 
                         geneGraphId <- c(as.character(x))
@@ -456,9 +476,9 @@ setMethod("fromAssosDFEntryToIGraphIdDF", "Graph", function(object, data,
                     f2 <- do.call(rbind, f2)
 
                 }else if(nrow(m1) == 1){
-                  #  print("fromAssosDFEntryToIGraphIdDF---------5")
+                  # print("fromAssosDFEntryToIGraphIdDF---------5")
 
-                    geneGraphId <- c(m1[,indexMetabolite+1])
+                    geneGraphId <- c(as.character(m1[,indexMetabolite+1]))
                     geneKEGGId <- c(temp[1])
                     metaboliteGraphId <- c(tempMetabolite)
                     metaboliteKEGGId <- c(temp[2])
@@ -475,7 +495,7 @@ setMethod("fromAssosDFEntryToIGraphIdDF", "Graph", function(object, data,
           #  print("fromAssosDFEntryToIGraphIdDF---------7")
 
             if(nrow(m1) > 1){
-             #   print("fromAssosDFEntryToIGraphIdDF---------8")
+                #print("fromAssosDFEntryToIGraphIdDF---------8")
                 f2 <- lapply(m1[,indexMetabolite+1], function(x){
 
                     geneGraphId <- c(as.character(x))
@@ -492,7 +512,7 @@ setMethod("fromAssosDFEntryToIGraphIdDF", "Graph", function(object, data,
 
                 }else{
 
-                  #  print("fromAssosDFEntryToIGraphIdDF---------9")
+              #  print("fromAssosDFEntryToIGraphIdDF---------9")
 
                 geneGraphId <- c(m1[indexMetabolite+1])
                 geneKEGGId <- c(temp[1])
@@ -595,7 +615,7 @@ setMethod("getFinalAssoDfSd", "Graph", function(object, data){
     m1g[,5] <- !(is.na(m1g[,1]));
     m1g[,6] <- !(is.na(m1g[,3]));
     m1g <- m1g[,as.vector(c(1,2,5,3,4,6))]
-    print(m1g)
+
     m1g <- cbind(m1g, as.vector(tempDF));
     colnames(m1g) <- c("geneGraphId", "geneKEGGId", "geneInGraph",
                        "metaboliteGraphId", "metaboliteKEGGId",
@@ -662,6 +682,7 @@ barplotFunction <- function(pathwayId, associatedGeneMetaDF,
                                        completeMetaboliteDF  );
 
     associatedMetabo <- getAssociatedMetaboByGene(associatedGeneMetaDF,gene)
+    print(associatedMetabo)
     aM <- data.frame(associatedMetabo);
 
     shortestsPathsDF <- t(shortestsPathsDF);
@@ -741,11 +762,13 @@ barplotFunction <- function(pathwayId, associatedGeneMetaDF,
       + ggplot2::theme(panel.border = ggplot2::element_blank(),
                      panel.grid.major = ggplot2::element_blank(),
                      panel.grid.minor = ggplot2::element_blank(),
+                     text = ggplot2::element_text(size=16, family="Arial"),
                      axis.line = ggplot2::element_line(colour = "black"))
       + ggplot2::xlab("Distance from Gene")
       + ggplot2::ylab("Metabolite count")
       + ggplot2::ggtitle(geneCommonName)
-      + ggplot2::scale_fill_manual(values = c("FALSE" ="grey", "TRUE" = "red"))
+      + ggplot2::scale_fill_manual(values = c("FALSE" ="grey",
+                                              "TRUE" = "red3"))
       + ggplot2::guides(fill=FALSE)
      );
 
@@ -776,52 +799,59 @@ heatmapFunction <- function(pathwayId, data){
                                 m1 = as.vector(data[,2]),
                                 m2 = as.vector(as.numeric(rMetaboliteList))))
 
-    tempDf1 <- removeAssociationsNotInGraph(tempDf1)
+    tempDf1 <- removeNotInGraph(tempDf1)
+
     data <- subset(tempDf1[,c(1,3)])
 
     data1 <- data.frame(c(data[2]))
     AllSP <- getDistanceAll(pathwayId, data, data1);
 
-    geneCommonName <- getCommonNames(as.vector(unlist(rownames(AllSP))))
+
+    geneCommonName <- getCommonNames(as.vector(unlist(rownames(AllSP))), "gene")
     geneCommonName <- as.vector(unlist(geneCommonName))
-    metaboliteCommonName <- getCommonNames(as.vector(unlist(colnames(AllSP))))
+
+    metaboliteCommonName <- getCommonNames(as.vector(unlist(colnames(AllSP))),
+                                                                   "metabolite")
     metaboliteCommonName <- as.vector(unlist(metaboliteCommonName))
+    #print(cbind(AllSP, geneCommonName, metaboliteCommonName))
+    tempDat <- data.frame(Row = rep(rownames(AllSP), each= ncol(AllSP)),
+                          Col = rep(colnames(AllSP), times= nrow(AllSP)))
+    isAsso <- getAssociationForHeatmap(data, tempDat)
+
+
     dat <- data.frame( Row = rep(geneCommonName, each= ncol(AllSP)),
                        Col = rep(metaboliteCommonName, times= nrow(AllSP)),
                        Y = c(t(AllSP)),
-              Associations = rep(c(TRUE,TRUE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE,
-                         FALSE,FALSE,FALSE,FALSE,TRUE))
+              Associations = isAsso
 
         );
-  #print(dat)
-
 
     # create frame to color edges of associated genes and metabolites
     frames = dat[dat$Associations, c("Row","Col")]
-
     frames$Row = as.integer(frames$Row)
     frames$Col = as.integer(frames$Col)
 
     # from discrete to continuous values...
     dat$Y <- as.numeric(as.character(dat$Y))
 
+
+    colors <- c("#800026","#BD0026","#E31A1C","#FC4E2A","#FD8D3C","#FEB24C",
+                "#FED976", "#FFEDA0", "#FFFFCC")
     p2 = ggplot2::ggplot(data=dat) +
        ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Y)) +
        ggplot2::theme(
-           panel.border = ggplot2::element_blank(),
+           panel.border = ggplot2::element_rect(colour="black",fill=NA,size=3),
            panel.grid.major = ggplot2::element_blank(),
-           panel.grid.minor = ggplot2::element_blank()) +
-       ggplot2::scale_fill_gradient2(low="yellow", mid = "orangered", high="red4",
-                       na.value="lightgrey", name="", midpoint = median(10))+
-       ggplot2::geom_rect(data=frames, size=1, fill=NA, colour="black",
+           panel.grid.minor = ggplot2::element_blank(),
+           text = ggplot2::element_text(size=16, family="Arial"),
+           axis.text=ggplot2::element_text(colour="black"),
+           axis.text.x = ggplot2::element_text(angle=315,vjust=1,hjust=0))+
+       ggplot2::scale_fill_gradientn(colours = colors)+
+       ggplot2::xlab("Genes")+
+       ggplot2::ylab("Metabolites")+
+       ggplot2::geom_rect(data=frames, size=1.25, fill=NA, colour="black",
        ggplot2::aes(xmin=Row-0.5, xmax=Row+0.5, ymin=Col-0.5, ymax=Col + 0.5)) +
-       ggplot2::geom_text(label = as.numeric(dat$Y, 1),
+       ggplot2::geom_text(label = as.numeric(dat$Y, 1),size =5, family="Arial",
                    ggplot2::aes(x = Row, y = Col)) +
        ggplot2::labs(title="Heatmap")
 
@@ -830,12 +860,25 @@ heatmapFunction <- function(pathwayId, data){
 
 }
 
+getAssociationForHeatmap<- function(data, heatmapDf){
+    boolIsAsso <- FALSE;
+    f <- apply(heatmapDf, 1, function
+               (x){
+       isAssociation <-  length(data[data[1] == x[1] & data[2] == x[2]])
+       if(isAssociation >= 2){
+           boolIsAsso <- TRUE;
+       }else{
+           boolIsAsso<- FALSE
+       }
+    })
+}
+
 
 
 getAssociatedMetaboByGene <- function(data, gene){
 
     selectedRows <- data[data$gene == gene,];
-    associatedMetabo <- selectedRows[,"metabolites"];
+    associatedMetabo <- selectedRows[,2];
 
     return <- associatedMetabo;
 
@@ -893,10 +936,11 @@ getDistanceAll <- function(pathwayId, associatedGeneMetaDF,
 
             # Change Na in finalDF to Inf value
             finalDF[is.na(finalDF)] <- Inf;
+           # print(finalDF)
             finalDF <- removeRowsDistanceAll(finalDF)
 
             finalDF <- subset(finalDF[, 1:ncol(finalDF)-1])
-           # print(finalDF)
+
             return <- finalDF;
         }
     }

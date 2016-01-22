@@ -22,7 +22,6 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
     permutatedMedians<-rep(NA,permutation)
 
 
-
     # change data to eliminate associations not where the gene or the metabolite
     # or both are not in the graph
     geneList<-(data[,1])
@@ -39,18 +38,32 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
     tempDf1 <- removeNotInGraph(tempDf1)
     rGeneList <- as.numeric(as.vector(tempDf1[,2]))
     rMetaboliteList <- as.numeric(as.vector(tempDf1[,4]))
-    print(tempDf1)
     data <- subset(tempDf1, select = c(1,3))
 
     geneList<-as.vector(unique(data[,1]))
     metaboliteList<-as.vector(unique(data[,2]))
 
 
+
+
+
     # making sure there is no doubles in the list of all gene measured
     geneMeasured <- unique(geneMeasured)
 
+
     # generate vectors with number of reactions for catalysed by gene
     rPossibleGeneToPermutate<-numberOfReactions(graphe@edgeDF,geneMeasured)
+
+    # remove gene not in the graph from list of all genes
+    tempDf <- data.frame(cbind(g1 = as.vector(geneMeasured),
+                         g2 = as.vector(as.numeric(rPossibleGeneToPermutate))))
+    #  print(tempDf)
+    tempDf <- removeNotInGraph(tempDf)
+    #   print(tempDf)
+
+    tempDf <- tempDf[!tempDf$g1 %in% geneList,]
+    possibleGeneToPermutate <- as.vector(tempDf[,1])
+    rPossibleGeneToPermutate <- as.numeric(as.vector(tempDf[,2]))
 
     # making sure there is no doubles in the list of all metabolites measured
     metaboliteMeasured <- as.vector(unique(metaboliteMeasured))
@@ -77,22 +90,8 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
     for(k in 1:permutation)
     {
 
-      #  print(geneList)
-      #  print(metaboliteList)
-
-        # remove gene not in the graph from list of all genes
-        tempDf <- data.frame(cbind(g1 = as.vector(geneMeasured),
-                                   g2 = as.vector(as.numeric(rPossibleGeneToPermutate))))
-      #  print(tempDf)
-        tempDf <- removeNotInGraph(tempDf)
-     #   print(tempDf)
-
-        tempDf <- tempDf[!tempDf$g1 %in% geneList,]
-        possibleGeneToPermutate <- as.vector(tempDf[,1])
-        rPossibleGeneToPermutate <- as.numeric(as.vector(tempDf[,2]))
-
         metaboliteShuffled <-sample(metaboliteMeasured,length(metaboliteList))
-        print(metaboliteShuffled)
+
         geneShuffled<-vector()
 
         # for all associated, replace by permutated genes
@@ -136,7 +135,7 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
             possibleGeneToPermutate<-possibleGeneToPermutate[-genePositionShuffled]
             rPossibleGeneToPermutate<-rPossibleGeneToPermutate[-genePositionShuffled]
         }
-      #print(geneShuffled)
+
       permutatedData <- data.frame(data);
 
         # create new 'data' where associated genes and metabolites are replace by shuffle genes and metabolites
@@ -152,11 +151,12 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
                                  })
                  permutatedData <- data.frame(t(f));
         }
-               for(k in 1:length(metaboliteList)){
+               for(m in 1:length(metaboliteList)){
                 f1<-  apply(permutatedData,1, function(x) {
 
-                     permutatedData <- gsub(metaboliteList[k],metaboliteShuffled[k], x)
-                     return <- permutatedData;
+                  permutatedData <- gsub(metaboliteList[m],
+                                         metaboliteShuffled[m], x)
+                  return <- permutatedData;
 
                  })
                  permutatedData <- data.frame(t(f1));
@@ -166,28 +166,58 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
       # print(permutatedData)
         # calculate distance with permutated data
         distPermutated<-getDistanceAsso(pathwayId,permutatedData,F)
-        print(distPermutated)
-        permutatedMedians[k]<-median(distPermutated$distance)
-        print(permutatedMedians)
+
+        permutatedMedians[k]<-ceiling(median(distPermutated$distance))
+        #print(c(k,ceiling(median(distPermutated$distance))))
         #process bar
         #setTxtProgressBar(pb, k)
     }
     # get median distance associated
-   # distAssociated<-getDistanceAsso(pathwayId,data,F)
-   #medianAssociated<-median(distAssociated$distance)
+    distAssociated<-getDistanceAsso(pathwayId,data,F)
+    medianAssociated<-median(distAssociated$distance)
 
     # output functions
     if(output == "medians"){
+
         return <- permutatedMedians
     }
-    if(output == "pvalue"){
-        pvalue<-(sum(permutatedMedians<=medianAssociated)+1)/(permutation+1)
-        return <- pvalue
+    else if(output == "pvalue"){
+        pvalue<-(sum(permutatedMedians<=medianAssociated)+1)/(permutation+1);
+        return <- pvalue;
     }
-    if(output == "histogram"){
-        return <- hist(permutatedMedians, abline(v=medianAssociated,lwd=3, col="red"))
+    else if(output == "histogram"){
+        permutatedMedians <- data.frame("medians" =  permutatedMedians);
+
+        histogramFunction(permutatedMedians, medianAssociated);
+
     }
 }
+
+histogramFunction <- function(permutatedMedians, assoMedian){
+
+    plot <- ggplot2::ggplot(data=permutatedMedians,
+                            ggplot2::aes(permutatedMedians$medians))
+    plot <- (plot + ggplot2::geom_histogram(binwidth = 1,width=1, color= "black", fill = "white")
+             + ggplot2::geom_vline(xintercept=medianAssociated, colour="red")
+             + ggplot2::theme(
+                 panel.border = ggplot2::element_blank(),
+                 panel.grid.major = ggplot2::element_blank(),
+                 panel.grid.minor = ggplot2::element_blank(),
+                 axis.line = ggplot2::element_line(colour = "black"),
+                 panel.background = ggplot2::element_rect
+                                               (color = 'white', fill="white"))
+             + ggplot2::labs(title="Histogram")
+             + ggplot2::scale_x_continuous(expand = c(0, 0))
+             + ggplot2::scale_y_continuous(expand = c(0, 0))
+
+             + ggplot2::xlab("Permutated Medians")
+             );
+    print(plot);
+
+
+}
+
+
 
 numberOfReactions <- function(reactionDF,geneList){
 
