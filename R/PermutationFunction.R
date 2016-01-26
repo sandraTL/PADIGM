@@ -3,9 +3,10 @@
 #' Permutation test to evauluate if gene-metabolite associations pairs are significantly closer
 #' than randomly selected gene-metabolite pairs
 #'
-#' @param data, data.frame() colunm c(gene, metabolite) representing association between them for each row
-#' geneMeasured, list of evaluated genes in study (associated and not associated)
-#' metaboliteMeasured, list of measured metabolites in study (associated and not associated)
+#' @param data, data.frame() colunm c(gene, metabolite) representing association
+#' between them for each row geneMeasured, list of evaluated genes in study
+#' (associated and not associated) metaboliteMeasured, list of measured
+#' metabolites in study (associated and not associated)
 #' permutation, number of permutation to execute
 #' output, "medians" median value of permutated sets - "pvalue" - "histogram"
 #'
@@ -16,14 +17,19 @@
 permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
                      permutation,output=c("medians","pvalue","histogram")){
 
-     # process bar
+    # process bar
+    # geneMeasured <- as.vector(geneMeasured)
+    # metaboliteMeasured <- as.vector(metaboliteMeasured)
+    geneMeasured <- c(t(geneMeasured))
+    metaboliteMeasured <- c(t(metaboliteMeasured))
+
     # pb <- txtProgressBar(min = 0, max = total, style = 3)
     graphe <-  createGraphFromPathway(pathwayId);
     permutatedMedians<-rep(NA,permutation)
 
 
-    # change data to eliminate associations not where the gene or the metabolite
-    # or both are not in the graph
+    # change data to eliminate associations not where the gene or
+    # the metabolite or both are not in the graph
     geneList<-(data[,1])
     rGeneList<-numberOfReactions(graphe@edgeDF,geneList)
     metaboliteList<-(data[,2])
@@ -165,15 +171,16 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
 
       # print(permutatedData)
         # calculate distance with permutated data
-        distPermutated<-getDistanceAsso(pathwayId,permutatedData,F)
+        distPermutated<-getDistanceAsso(pathwayId,permutatedData,F,"data.frame")
 
         permutatedMedians[k]<-ceiling(median(distPermutated$distance))
+         print(c(k, permutatedMedians[k]))
         #print(c(k,ceiling(median(distPermutated$distance))))
         #process bar
         #setTxtProgressBar(pb, k)
     }
     # get median distance associated
-    distAssociated<-getDistanceAsso(pathwayId,data,F)
+    distAssociated<-getDistanceAsso(pathwayId,data,F, "data.frame")
     medianAssociated<-median(distAssociated$distance)
 
     # output functions
@@ -186,6 +193,8 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
         return <- pvalue;
     }
     else if(output == "histogram"){
+        # get median distance associated
+
         permutatedMedians <- data.frame("medians" =  permutatedMedians);
 
         histogramFunction(permutatedMedians, medianAssociated);
@@ -193,7 +202,7 @@ permutationFunction <- function(pathwayId,data,geneMeasured,metaboliteMeasured,
     }
 }
 
-histogramFunction <- function(permutatedMedians, assoMedian){
+histogramFunction <- function(permutatedMedians, medianAssociated){
 
     plot <- ggplot2::ggplot(data=permutatedMedians,
                             ggplot2::aes(permutatedMedians$medians))

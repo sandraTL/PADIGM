@@ -240,8 +240,9 @@ setMethod("associatedShortestPaths","Graph", function(object, data){
 #' @param data(gene, metabolites )
 #' @keywords KEGG
 #' @export
-#' @examples getDistanceAsso(pathwayId, data)
-getDistanceAsso <- function(pathwayId, data, ordered = FALSE){
+#' @examples getDistanceAsso(pathwayId, data, ouput)
+getDistanceAsso <- function(pathwayId, data, ordered = FALSE,
+                            output = c("xslx","data.frame")){
 
     #if the xml file was already dowmloaded
     if(isFileInDirectory(pathwayId) == FALSE){
@@ -298,15 +299,18 @@ getDistanceAsso <- function(pathwayId, data, ordered = FALSE){
 
     finalDF1 <- data.frame("geneCommonName" = geneCommonName,
                            "geneKEGGId" = finalDF[,1],
-                           "isGeneInGraph" = finalDF[,2],
+                           "isGeneInMap" = finalDF[,2],
                            "metaboliteCommonName" = metaboliteCommonName,
                            "metaboliteKEGGId" = finalDF[,3],
-                           "isMetaboliteInGraph" = finalDF[,4],
+                           "isMetaboliteInMap" = finalDF[,4],
                            "distance" = finalDF[,5]);
 
    # return <- finalDF1;
-    write.table(finalDF1, file = "AssociatedDataDistance.txt",sep="\t"
-                ,row.names=FALSE);
+#     write.table(finalDF1, file = "AssociatedDataDistance.txt",sep="\t"
+#                 ,row.names=FALSE);
+    if(output == "xslx"){assoDataXlsx(finalDF1)}
+    else if(output == "data.frame"){return <- finalDF1;}
+
 
 }
 
@@ -762,7 +766,7 @@ barplotFunction <- function(pathwayId, associatedGeneMetaDF,
       + ggplot2::theme(panel.border = ggplot2::element_blank(),
                      panel.grid.major = ggplot2::element_blank(),
                      panel.grid.minor = ggplot2::element_blank(),
-                     text = ggplot2::element_text(size=16, family="Arial"),
+                     text = ggplot2::element_text(size=12, family="Arial"),
                      axis.line = ggplot2::element_line(colour = "black"))
       + ggplot2::xlab("Distance from Gene")
       + ggplot2::ylab("Metabolite count")
@@ -821,8 +825,8 @@ heatmapFunction <- function(pathwayId, data){
 
     dat <- data.frame( Row = rep(geneCommonName, each= ncol(AllSP)),
                        Col = rep(metaboliteCommonName, times= nrow(AllSP)),
-                       Y = c(t(AllSP)),
-              Associations = isAsso
+                       Distance = c(t(AllSP)),
+                       Associations = isAsso
 
         );
 
@@ -832,18 +836,18 @@ heatmapFunction <- function(pathwayId, data){
     frames$Col = as.integer(frames$Col)
 
     # from discrete to continuous values...
-    dat$Y <- as.numeric(as.character(dat$Y))
+    dat$Distance <- as.numeric(as.character(dat$Distance))
 
 
     colors <- c("#800026","#BD0026","#E31A1C","#FC4E2A","#FD8D3C","#FEB24C",
                 "#FED976", "#FFEDA0", "#FFFFCC")
     p2 = ggplot2::ggplot(data=dat) +
-       ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Y)) +
+       ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Distance)) +
        ggplot2::theme(
            panel.border = ggplot2::element_rect(colour="black",fill=NA,size=3),
            panel.grid.major = ggplot2::element_blank(),
            panel.grid.minor = ggplot2::element_blank(),
-           text = ggplot2::element_text(size=16, family="Arial"),
+           text = ggplot2::element_text(size=12, family="Arial"),
            axis.text=ggplot2::element_text(colour="black"),
            axis.text.x = ggplot2::element_text(angle=315,vjust=1,hjust=0))+
        ggplot2::scale_fill_gradientn(colours = colors)+
@@ -851,8 +855,8 @@ heatmapFunction <- function(pathwayId, data){
        ggplot2::ylab("Metabolites")+
        ggplot2::geom_rect(data=frames, size=1.25, fill=NA, colour="black",
        ggplot2::aes(xmin=Row-0.5, xmax=Row+0.5, ymin=Col-0.5, ymax=Col + 0.5)) +
-       ggplot2::geom_text(label = as.numeric(dat$Y, 1),size =5, family="Arial",
-                   ggplot2::aes(x = Row, y = Col)) +
+       ggplot2::geom_text(label = as.numeric(dat$Distance, 1),
+                       size =3, family="Arial",ggplot2::aes(x = Row, y = Col)) +
        ggplot2::labs(title="Heatmap")
 
 

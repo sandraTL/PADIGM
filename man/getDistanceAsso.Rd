@@ -4,7 +4,8 @@
 \alias{getDistanceAsso}
 \title{Fonction that calculates distance between each gene-metabolite pairs.}
 \usage{
-getDistanceAsso(pathwayId, data, ordered = FALSE)
+getDistanceAsso(pathwayId, data, ordered = FALSE, output = c("xslx",
+  "data.frame"))
 }
 \arguments{
 \item{data(gene,}{metabolites )}
