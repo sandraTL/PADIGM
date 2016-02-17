@@ -1,8 +1,55 @@
-testIfRowNameExistInDF <- function(dF, rowName){
 
+#'merge rows with smallest values in each col for repeated metabolites or genes
+#'Genes and metabolites are likely to be repeated since we can find them in
+#'multiple places in the graph reprensentation of a map
 
+mergeRowsWithSmallestValueByKEGGId <- function(df){
+
+    metaboName <- as.vector(df$KEGGId)
+
+    replicat <- unique(metaboName[duplicated(metaboName)])
+
+    #colIds <- colnames(df)
+    for(x in replicat){
+
+        #find rows ID of this replicated element
+        rowReplicat <- which(df$KEGGId == x)
+        keggId <- data.frame(KEGGId = df$KEGGId);
+
+        df <- df[,-ncol(df)]
+
+        # row ID to be replaced with smallest value
+        rowReplicatToReplace <- rowReplicat[1]
+
+        # row to remove
+        rowReplicatToRemove <- rowReplicat[-1]
+
+        # subset of rows with the replicated value
+        rowReplicatSubDF <- df[rowReplicat,]
+
+        # sort all columns by ascending order
+        rowReplicatSortedSubDF <- apply(rowReplicatSubDF,2,sort)
+        rowReplicatSortedSubDF <- data.frame(rowReplicatSortedSubDF);
+
+        # keep only the first row -> the one with smallest vlaues
+         rowMinValues <- rowReplicatSortedSubDF[1,]
+
+        df[rowReplicatToReplace,] <- rowMinValues;
+
+        df <- cbind(df, keggId)
+        df <- df[-rowReplicatToRemove,]
+
+     }
+
+    return <- df;
 
 }
+
+
+
+
+
+
 
 merge2DFWithSmallestValue <- function(df1, df2)
 
@@ -45,7 +92,7 @@ removeRowsDistanceAsso <- function(df){
 
         tempDF <- data.frame(x)
 
-        tempDF <- tempDF[order(tempDF[,7]),]
+        tempDF <- tempDF[order(tempDF[,5]),]
         return <-tempDF[1,]
     })
 
@@ -55,6 +102,10 @@ removeRowsDistanceAsso <- function(df){
 
 }
 
+
+
+#' Thsi function also sorts the data by metabolite or gene ids... we don't want
+#' that
 removeRowsDistanceAll <- function(df){
 
     df$geneKEGGId <- I(df$geneKEGGId)

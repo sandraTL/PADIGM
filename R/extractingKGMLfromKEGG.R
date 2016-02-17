@@ -14,9 +14,30 @@ getPathwayKGML <- function(pathwayId) {
     adressfile <- toStringAdressfile(pathwayId);
     destfile <- toStringDestfile(pathwayId);
 
+#     tryCatch(download.file(adressfile, destfile,
+#         quiet = TRUE,method = "curl"), warning=function(w)
+#             print("pathway doesn't exist in KEGG database"))
 
-    download.file(adressfile, destfile, method = "curl");
 
+    op <- options(warn=2)
+    file <- tryCatch( download.file(adressfile, destfile,
+                                    quiet = TRUE,method = "curl"),error=function(e) e,
+                     warning=function(w) w)
+
+    if(is(file,"warning")){
+
+        if(file[1]$message == "download had nonzero exit status"){
+
+            stop("pathway doesn't exist in KEGG database",call. = FALSE )
+        }
+    }
+
+
+
+#     e <- download.file(adressfile, destfile,
+#                        quiet = TRUE,method = "curl")
+
+return <-file;
 }
 
 toStringDestfile <- function(pathwayId){

@@ -117,13 +117,14 @@ getKGMLRootNode <- function(pathwayId){
     #get the root of the KGML document
     pathFile <- toStringPathFile(pathwayId);
 
-    if(is.na(file.info(pathFile)$size) == FALSE){
-    xmlfile <- XML::xmlParse(pathFile);
+     if(is.na(file.info(pathFile)$size)== FALSE){
+     xmlfile <- XML::xmlParse(pathFile);
+     xmltop <- XML::xmlRoot(xmlfile); #gives content of root
+          }else
+         xmltop = NULL;
 
-    xmltop <- XML::xmlRoot(xmlfile); #gives content of root
-    } else xmltop = NULL;
-
-    return <- xmltop;
+#
+     return <- xmltop;
 
 }
 
@@ -157,8 +158,13 @@ getCommonNames <- function(vectorOfKEGGIds, type = c("gene","metabolite")){
                 # return the first name of list of genes or metabolites
                 if(type == "gene"){
                     tempName <- unlist(strsplit(x$NAME[1], "[,]"))[1];
+                    #print(tempName)
+                   # print(vectorOfKEGGIds[oldcount:count])
                 }else if(type == "metabolite"){
                     tempName <- unlist(strsplit(x$NAME[1], "[;]"))[1];
+                   # print(tempName)
+                    #print(vectorOfKEGGIds[oldcount:count])
+
                 }
 
             return <- tempName;
@@ -175,13 +181,19 @@ getCommonNames <- function(vectorOfKEGGIds, type = c("gene","metabolite")){
 
                 if(type == "gene"){
                     tempName <- unlist(strsplit(x$NAME[1], "[,]"))[1];
+                   # print(tempName)
+                   # print(vectorOfKEGGIds[oldcount:count])
+
                 }else if(type == "metabolite"){
                     tempName <- unlist(strsplit(x$NAME[1], "[;]"))[1];
+                   # print(tempName)
+                   # print(vectorOfKEGGIds[oldcount:count])
                 }
                 return <- tempName;
             } )
             names <- do.call(rbind, names);
     }
+
     return <- names;
 }
 
