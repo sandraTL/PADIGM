@@ -2,8 +2,8 @@
 % Please edit documentation in R/PermutationFunction.R
 \name{permutationFunction}
 \alias{permutationFunction}
-\title{Permutation test to evauluate if gene-metabolite associations pairs are significantly closer
-than randomly selected gene-metabolite pairs}
+\title{Permutation test to evauluate if gene-metabolite associations pairs
+are significantly closer than randomly selected gene-metabolite pairs}
 \usage{
 permutationFunction(pathwayId, data, geneMeasured, metaboliteMeasured,
   permutation, output = c("medians", "pvalue", "histogram"))
@@ -17,11 +17,15 @@ permutation, number of permutation to execute
 output, "medians" median value of permutated sets - "pvalue" - "histogram"}
 }
 \description{
-Permutation test to evauluate if gene-metabolite associations pairs are significantly closer
-than randomly selected gene-metabolite pairs
+Permutation test to evauluate if gene-metabolite associations pairs
+are significantly closer than randomly selected gene-metabolite pairs
 }
 \examples{
 permutationFunction("hsa01100", data, gene, metabolite, 1000)
+take out chosen gene (and his number of reactions)
+from list of possible genes
+create new 'data' where associated genes and metabolites
+are replace by shuffle genes and metabolites for genes
 }
 \keyword{permutation}
 

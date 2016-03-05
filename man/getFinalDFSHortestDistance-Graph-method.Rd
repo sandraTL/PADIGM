@@ -34,11 +34,6 @@ the distance that is the smallest between the 2 to the same metabolite.
 \examples{
 getCompoundNodeKgmlId(g, data, indexMetabolite)
 get all shortest paths for both ends of gene to all metabolites
-Each gene is related to 2 metabolites, choose the shortest distance
-between both gene-metabolite to metabolite
- testing the length of finalDF, if bigger then 1 remove duplicate
- if not table of length 1 -> no need to remove duplicates
-identification of rownames with genes from entry data
 }
 \keyword{igraph,}
 \keyword{kgmlId}

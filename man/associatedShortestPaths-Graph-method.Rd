@@ -36,10 +36,6 @@ associatedShortestPaths(Graph, data)
 calcul al distances
 choosing smallest distance between the two metabolites of gene and
 all metabolites
-if length of path is 0 -> couldnt reach a path
-if length of path is >0 i have to do length -1
-for example path i am lookinf for path from 1523 to 1523
-path is 1523 and the length is 1. But the real length is 0.
 }
 \keyword{kegg}
 

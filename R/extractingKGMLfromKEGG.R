@@ -14,11 +14,6 @@ getPathwayKGML <- function(pathwayId) {
     adressfile <- toStringAdressfile(pathwayId);
     destfile <- toStringDestfile(pathwayId);
 
-#     tryCatch(download.file(adressfile, destfile,
-#         quiet = TRUE,method = "curl"), warning=function(w)
-#             print("pathway doesn't exist in KEGG database"))
-
-
     op <- options(warn=2)
     file <- tryCatch( download.file(adressfile, destfile,
                                     quiet = TRUE,method = "curl"),error=function(e) e,
@@ -31,11 +26,6 @@ getPathwayKGML <- function(pathwayId) {
             stop("pathway doesn't exist in KEGG database",call. = FALSE )
         }
     }
-
-
-
-#     e <- download.file(adressfile, destfile,
-#                        quiet = TRUE,method = "curl")
 
 return <-file;
 }
@@ -81,18 +71,46 @@ isFileInDirectory <- function(pathwayId){
     return <- bool;
 }
 
-
-
 toCompoundAdressfile <- function(compoundKeggId){
-
-
-    #    http://rest.kegg.jp/list/G00092
 
     s1 <- "rest.kegg.jp/list/";
     s2 <-  toString(compoundKeggId);
 
     adressfile <- paste(s1,s2, sep= "");
-  #  adressfile <- paste(s4, s3, sep="");
 
     return <- adressfile;
 }
+
+getAllMetaboliteInKEGG <- function(){
+
+
+    metaboliteList <- as.vector(names(KEGGREST::keggList("cpd")))
+
+    metaboliteList <- gsub("cpd:", "", metaboliteList)
+   # adressfile <- "rest.kegg.jp/list/cpd";
+    return <- metaboliteList;
+}
+
+getAllHumanGeneInKEGG<- function(){
+
+    geneList <- as.vector(names(KEGGREST::keggList("hsa")))
+    #adressfile <- "rest.kegg.jp/list/hsa";
+    return <- geneList;
+}
+
+getAllMetaboliteInMap <- function(mapId){
+
+    metaboliteList <- as.vector(KEGGREST::keggLink("cpd",mapId))
+    metaboliteList <- gsub("cpd:", "", metaboliteList)
+
+    return <- metaboliteList;
+}
+
+getAllGeneInMap<- function(hsaId){
+
+    geneList <- as.vector(KEGGREST::keggLink("genes",hsaId))
+
+    return <- geneList;
+}
+
+

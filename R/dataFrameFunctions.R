@@ -1,4 +1,3 @@
-
 #'merge rows with smallest values in each col for repeated metabolites or genes
 #'Genes and metabolites are likely to be repeated since we can find them in
 #'multiple places in the graph reprensentation of a map
@@ -45,12 +44,6 @@ mergeRowsWithSmallestValueByKEGGId <- function(df){
 
 }
 
-
-
-
-
-
-
 merge2DFWithSmallestValue <- function(df1, df2)
 
 for (row in 1:nrow(df)) {
@@ -59,8 +52,6 @@ for (row in 1:nrow(df)) {
     finalDF <- rbind(finalDF,rf);
     return <- finalDF;
 }
-
-
 
 removeDuplicatedColumnDF <- function(df){
 
@@ -78,7 +69,6 @@ df[is.na(df)] <- Inf;
 
 return <- df;
 }
-
 
 removeRowsDistanceAsso <- function(df){
 
@@ -101,8 +91,6 @@ removeRowsDistanceAsso <- function(df){
     return <- finalDF;
 
 }
-
-
 
 #' Thsi function also sorts the data by metabolite or gene ids... we don't want
 #' that
@@ -128,9 +116,3 @@ removeRowsDistanceAll <- function(df){
     return <- finalDF;
 
 }
-
-
-
-
-
-

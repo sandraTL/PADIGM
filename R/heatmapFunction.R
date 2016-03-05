@@ -61,7 +61,7 @@ heatmapFunction <- function(pathwayId, data){
     p2 = ggplot2::ggplot(data=dat) +
         ggplot2::geom_raster(ggplot2::aes(x=Row, y=Col, fill=Distance)) +
         ggplot2::theme(
-            panel.border = ggplot2::element_rect(colour="black",fill=NA,size=3),
+            panel.border = ggplot2::element_rect(colour="black",fill=NA,size=2),
             panel.grid.major = ggplot2::element_blank(),
             panel.grid.minor = ggplot2::element_blank(),
             text = ggplot2::element_text(size=12, family="Arial"),
@@ -70,14 +70,14 @@ heatmapFunction <- function(pathwayId, data){
         ggplot2::scale_fill_gradientn(colours = colors)+
         ggplot2::xlab("Genes")+
         ggplot2::ylab("Metabolites")+
-        ggplot2::geom_rect(data=frames, size=1.25, fill=NA, colour="black",
+        ggplot2::geom_rect(data=frames, size=1, fill=NA, colour="black",
     ggplot2::aes(xmin=Row-0.5, xmax=Row+0.5, ymin=Col-0.5, ymax=Col + 0.5)) +
         ggplot2::geom_text(label = as.numeric(dat$Distance, 1),
-    size =3, family="Arial",ggplot2::aes(x = Row, y = Col)) +
+    size =2, family="Arial",ggplot2::aes(x = Row, y = Col)) +
 
 
 
-    ggplot2::ggsave("heatmapAsso1.png", dpi=300)
+    ggplot2::ggsave("heatmapAsso1.png", width = 9, height = 7, dpi=300)
     print(p2);
 
 }

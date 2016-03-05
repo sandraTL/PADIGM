@@ -275,7 +275,7 @@ getDistanceAsso <- function(pathwayId, data, ordered = FALSE,
     #graph creation
 
     if(!exists("graphe")){
-        print("create graphe")
+
     graphe <-  createGraphFromPathway(pathwayId);
     }
 
@@ -312,26 +312,32 @@ getDistanceAsso <- function(pathwayId, data, ordered = FALSE,
     row.names(finalDF) <- row.names(1:length(finalDF[,1]))
     finalDF <- subset(finalDF, , c(2,3,5,6,7))
 
-    #Adding common names for genes and emtabolites
-    geneCommonName <- getCommonNames(as.vector(unlist(finalDF[,1])), "gene")
-    geneCommonName <- as.vector(unlist(geneCommonName))
 
-    metaboliteCommonName <- getCommonNames(as.vector(unlist(finalDF[,3])),
-                                           "metabolite")
-    metaboliteCommonName <- as.vector(unlist(metaboliteCommonName))
-   # print(finalDF)
-#    print(length(geneCommonName))
-#     print(length(finalDF[,1]))
+    ##Normal use#########
 
-    finalDF1 <- data.frame("geneCommonName" = geneCommonName,
-                           "geneKEGGId" = finalDF[,1],
+
+#Adding common names for genes and emtabolites
+#     geneCommonName <- getCommonNames(as.vector(unlist(finalDF[,1])), "gene")
+#     geneCommonName <- as.vector(unlist(geneCommonName))
+#
+#     metaboliteCommonName <- getCommonNames(as.vector(unlist(finalDF[,3])),
+#                                            "metabolite")
+#     metaboliteCommonName <- as.vector(unlist(metaboliteCommonName))
+
+#     finalDF1 <- data.frame("geneCommonName" = geneCommonName,
+#                            "geneKEGGId" = finalDF[,1],
+#                            "isGeneInMap" = finalDF[,2],
+#                            "metaboliteCommonName" = metaboliteCommonName,
+#                            "metaboliteKEGGId" = finalDF[,3],
+#                            "isMetaboliteInMap" = finalDF[,4],
+#                            "distance" = finalDF[,5]);
+
+    ##permutation use
+    finalDF1 <- data.frame("geneKEGGId" = finalDF[,1],
                            "isGeneInMap" = finalDF[,2],
-                           "metaboliteCommonName" = metaboliteCommonName,
                            "metaboliteKEGGId" = finalDF[,3],
                            "isMetaboliteInMap" = finalDF[,4],
-                           "distance" = finalDF[,5]);
-
-    # return <- finalDF1;
+                           "distance" = finalDF[,5]);  # return <- finalDF1;
     #     write.table(finalDF1, file = "AssociatedDataDistance.txt",sep="\t"
     #                 ,row.names=FALSE);
     if(output == "xslx"){assoDataXlsx(finalDF1)}
