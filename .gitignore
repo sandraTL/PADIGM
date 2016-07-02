@@ -1,3 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
+
+R/graphFunctions.R
+
+NAMESPACE
+
+R/graphFunctions.R
